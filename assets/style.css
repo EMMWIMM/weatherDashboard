@@ -4,7 +4,108 @@
 --green:#CCEB94;
 --yellow:#FFC300;
 --purple:#581845;
+--lightPurple: #DAB3CE;
+--lavender:#A46090;
 --maroon:#900C3F;
 --pink:#fe7b7b;
+--pwdPink: #F2E7EF;
 
 }
+body{
+  background-color: var(--lightPurple);
+}
+
+.info{
+  display:flex;
+  /* flex-wrap: wrap; */
+  flex-direction: row;
+}
+
+.rightSection{
+  display: flex;
+  flex-direction: column;
+}
+
+nav{
+  display: flex;
+  flex-direction: column;
+  /* justify-content: stretch; */
+}
+
+form{
+display: flex;
+flex-direction: row;
+
+
+}
+.jumbotron{
+display: flex,;
+background-color: var(--lightGreen);
+border-style: solid;
+border-color: var(--green);
+border-width: 10px;
+color: var(--purple);
+/* flex-wrap: wrap; */
+
+}
+
+.card{
+  display: flex;
+  flex-wrap: wrap;
+  /* flex-direction: row; */
+  background-color: var(--purple);
+  color: var(--lightPurple);
+}
+
+.weekdays{
+display:flex;
+/* justify-content: center;
+align-items: center; */
+flex-direction: row;
+justify-content: space-around;
+
+}
+
+ul{
+  list-style: none;
+  justify-content: flex-start;
+}
+
+.card li{
+  justify-content: flex-end;
+
+}
+
+
+.city{
+padding: 4px;
+margin: 1px;
+  background-color: var(--lavender);
+  border-radius: 5px;
+}
+
+.city:hover{
+  background-color: var(--pink);
+  cursor:pointer;
+}
+.btn{
+border-color: var(--green);
+color: var(--green);
+  height:calc(1.5em + 0.75rem + 2px)
+
+}
+
+.btn:hover{
+  background-color: var(--green);
+  color: var(--offWhite);
+  border-color: var(--green);
+}
+
+
+
+/* .bigStuff{
+  display: flex;
+  flex-direction: row;
+  /* flex-wrap: wrap; */
+  /* justify-content: flex-end; */
+/* }
