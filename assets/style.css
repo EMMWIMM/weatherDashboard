@@ -29,13 +29,14 @@ body{
 nav{
   display: flex;
   flex-direction: column;
+  padding-top: 10px;
   /* justify-content: stretch; */
 }
 
 form{
 display: flex;
 flex-direction: row;
-
+height: 50px;
 
 }
 .jumbotron{
@@ -69,6 +70,7 @@ justify-content: space-around;
 ul{
   list-style: none;
   justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .card li{
@@ -99,6 +101,20 @@ color: var(--green);
   background-color: var(--green);
   color: var(--offWhite);
   border-color: var(--green);
+}
+
+.sidebar{
+  background-color: var(--pwdPink);
+  border-style: solid;
+  border-color: var(--lavender);
+  border-width: 10px;
+  color: var(--purple);
+  background-size: auto;
+
+}
+
+.col-8{
+  flex:0 0 8%;
 }
 
 
