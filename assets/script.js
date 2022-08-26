@@ -8,14 +8,32 @@ var day2 = document.getElementById("day2");
 var day3 = document.getElementById("day3");
 var day4 = document.getElementById("day4");
 var day5 = document.getElementById("day5");
-var currentTemp = "";
+var t1 = document.getElementById("t1");
+var w1 = document.getElementById("w1");
+var h1 = document.getElementById("h1");
+var t2 = document.getElementById('t2')
+var t3 = document.getElementById('t3')
+var t4 = document.getElementById('t4')
+var t5 = document.getElementById('t5')
+var w2 = document.getElementById('w2')
+var w3 = document.getElementById('w3')
+var w4 = document.getElementById('w4')
+var w5 = document.getElementById('w5')
+var h2 = document.getElementById('h2')
+var h3 = document.getElementById('h3')
+var h4 = document.getElementById('h4')
+var h5 = document.getElementById('h5')
 var currentHum = "";
 var currentWind ="";
 var currentUV= "";
+var weatherDataAll = [weatherData]
+var weatherData = [{temp:"90", wind:"something", humidity:"20", skies:"12"}];
+
+
+
 // fetch api and what to do with retrieved info
 //const car = {type:"Fiat", model:"500", color:"white"};
-var weatherData = [{temp:"90", wind:"something", humidity:"20", skies:"12"}
-                      ,{temp:"100", wind:"80mph", humidity:"99", skies:"loudy"}];
+// var weatherData = [{temp:"90", wind:"something", humidity:"20", skies:"12"},{temp:"100", wind:"80mph", humidity:"99", skies:"loudy"},{temp:"100", wind:"80mph", humidity:"99", skies:"loudy"},{temp:"100", wind:"80mph", humidity:"99", skies:"loudy"},{temp:"100", wind:"80mph", humidity:"99", skies:"loudy"}];
 function getAPICity(cityName){
   return fetch(requestURL+"&q="+cityName)
     .then((response) => {
@@ -45,6 +63,10 @@ async function renderWeatherData(cityName){
 
     console.log("temp? "+cityWeatherData.list[i].weather[0].main);
     weatherData.skies = cityWeatherData.list[i].weather[0].main;
+
+weatherDataAll.push(weatherData.temp, weatherData.wind, weatherData.humidity, weatherData.skies);
+addText();
+
   }
   //weatherData = cityWeatherData;
 
@@ -53,3 +75,30 @@ async function renderWeatherData(cityName){
 
 
 // use api to set textcontent on required feilds
+
+function addText(){
+
+todayTemp.innerHTML = "Temp:" + weatherDataAll[1]
+todayWind.innerHTML = "Wind:" + weatherDataAll[2]
+todayHum.innerHTML = "Humidity:" + weatherDataAll[3]
+
+t1.innerHTML = "Temp:" + weatherDataAll[1]
+w1.innerHTML = "Wind:" + weatherDataAll[2]
+h1.innerHTML = "Humidity:" + weatherDataAll[3]
+
+t2.innerHTML = "Temp:" + weatherDataAll[5]
+w2.innerHTML = "Wind:" + weatherDataAll[6]
+h2.innerHTML = "Humidity:" + weatherDataAll[7]
+
+t3.innerHTML = "Temp:" + weatherDataAll[9]
+w3.innerHTML = "Wind:" + weatherDataAll[10]
+h3.innerHTML = "Humidity:" + weatherDataAll[11]
+
+t4.innerHTML = "Temp:" + weatherDataAll[13]
+w4.innerHTML = "Wind:" + weatherDataAll[14]
+h4.innerHTML = "Humidity:" + weatherDataAll[15]
+
+t5.innerHTML = "Temp:" + weatherDataAll[16]
+w5.innerHTML = "Wind:" + weatherDataAll[17]
+h5.innerHTML = "Humidity:" + weatherDataAll[18]
+}
