@@ -28,6 +28,8 @@ var currentWind ="";
 var currentUV= "";
 var weatherDataAll = [weatherData]
 var weatherData = [{temp:"90", wind:"something", humidity:"20", skies:"12"}];
+var search = document.getElementById('searchbar')
+
 
 
 
