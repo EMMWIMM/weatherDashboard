@@ -98,6 +98,8 @@ async function renderWeatherData(cityName){
     console.log("temp? "+cityWeatherData.list[i].weather[0].main);
     weatherData.skies = cityWeatherData.list[i].weather[0].main;
 
+    //weatherData.uv = cityWeatherData.list[i]. UNKNOWN... free version does not appear to include UV... could not determine which version to PAY for to get UV index
+
     weatherData.city = cityName;
 
     weatherDataAll.push(weatherData.temp, weatherData.wind, weatherData.humidity, weatherData.skies, weatherData.city,);
@@ -112,8 +114,11 @@ async function renderWeatherData(cityName){
 
 
 function addCityButton(cityName){
+  //TODO: make these clickable just like the other other li and add class (style)
   console.log('addCityButton');
   var li = document.createElement("li");
+  li.className= 'city';
+  li.append(<li class="city" onclick= "renderWeatherData("+cityName+ ")";
   li.appendChild(document.createTextNode(cityName));
   cityButtons.appendChild(li);
 }
