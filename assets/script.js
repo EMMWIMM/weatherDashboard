@@ -24,6 +24,7 @@ var h2 = document.getElementById('h2')
 var h3 = document.getElementById('h3')
 var h4 = document.getElementById('h4')
 var h5 = document.getElementById('h5')
+var cityButtons = document.getElementById('searchCityButtons')
 var currentHum = "";
 var currentWind ="";
 var currentUV= "";
@@ -70,8 +71,18 @@ function getCoords(cityName){
 }
 async function renderWeatherData(cityName){
   event.preventDefault();
-  var cityCoord = away getCoords(cityName);
-  
+  var lsWeatherCity = localStorage.getItem(cityName);
+  console.log("lsWeatherCity:"+lsWeatherCity);
+  var cityWeatherData;
+  if(!lsWeatherCity){
+      console.log('not stored');
+      cityWeatherData = await getAPICity(cityName);
+  } else {
+      cityWeatherData = JSON.parse(lsWeatherCity);
+  }
+
+  //var cityCoord = await getAPICity(cityName);
+
   //var cityWeatherData = await getAPICity(cityName);
   for(i=0; i<40; i=i+8){
     console.log("i: "+i);
@@ -87,16 +98,25 @@ async function renderWeatherData(cityName){
     console.log("temp? "+cityWeatherData.list[i].weather[0].main);
     weatherData.skies = cityWeatherData.list[i].weather[0].main;
 
-weatherDataAll.push(weatherData.temp, weatherData.wind, weatherData.humidity, weatherData.skies);
-addText();
+    weatherData.city = cityName;
 
+    weatherDataAll.push(weatherData.temp, weatherData.wind, weatherData.humidity, weatherData.skies, weatherData.city,);
+    console.log(JSON.stringify("cwd : "+cityWeatherData));
+    localStorage.setItem( weatherData.city, JSON.stringify(cityWeatherData));
   }
+  addText();
+  addCityButton(cityName);
   //weatherData = cityWeatherData;
 
 }
 
 
-
+function addCityButton(cityName){
+  console.log('addCityButton');
+  var li = document.createElement("li");
+  li.appendChild(document.createTextNode(cityName));
+  cityButtons.appendChild(li);
+}
 // use api to set textcontent on required feilds
 
 function addText(){
