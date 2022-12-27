@@ -1,4 +1,5 @@
 var requestURL = "http://api.openweathermap.org/data/2.5/forecast?APPID=8cc2bc5b692b912633c29866f21e24d9&units=imperial&";
+var coordsURL = "http://api.openweathermap.org/geo/1.0/direct?limit=1&appid=8cc2bc5b692b912633c29866f21e24d9";
 var todayWind = document.getElementById("todayWind");
 var todayUV = document.getElementById("todayUV");
 var todayHum = document.getElementById("todayHum");
@@ -37,6 +38,7 @@ var search = document.getElementById('searchbar')
 //const car = {type:"Fiat", model:"500", color:"white"};
 // var weatherData = [{temp:"90", wind:"something", humidity:"20", skies:"12"},{temp:"100", wind:"80mph", humidity:"99", skies:"loudy"},{temp:"100", wind:"80mph", humidity:"99", skies:"loudy"},{temp:"100", wind:"80mph", humidity:"99", skies:"loudy"},{temp:"100", wind:"80mph", humidity:"99", skies:"loudy"}];
 function getAPICity(cityName){
+  console.log("getAPICity("+cityName+")");
   return fetch(requestURL+"&q="+cityName)
     .then((response) => {
       return response.json().then((data) => {
@@ -50,8 +52,27 @@ function getAPICity(cityName){
   //   console.log("we got it bois");
   // }
 }
+
+function getCoords(cityName){
+  console.log("getCoords("+cityName+")");
+  return fetch(coordsURL+"&q="+cityName)
+    .then((response) => {
+      return response.json().then((data) => {
+        console.log(data);
+        return data;
+      }).catch((err) => {
+        console.log(err);
+      })
+    });
+  // .then(){
+  //   console.log("we got it bois");
+  // }
+}
 async function renderWeatherData(cityName){
-  var cityWeatherData = await getAPICity(cityName);
+  event.preventDefault();
+  var cityCoord = away getCoords(cityName);
+  
+  //var cityWeatherData = await getAPICity(cityName);
   for(i=0; i<40; i=i+8){
     console.log("i: "+i);
     console.log("temp? "+cityWeatherData.list[i].main.temp);
