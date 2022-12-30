@@ -4,6 +4,7 @@ var todayWind = document.getElementById("todayWind");
 var todayUV = document.getElementById("todayUV");
 var todayHum = document.getElementById("todayHum");
 var todayTemp = document.getElementById("todayTemp");
+var cityAndDate = document.getElementById('cityAndDate');
 var day1 = document.getElementById("day1");
 var day2 = document.getElementById("day2");
 var day3 = document.getElementById("day3");
@@ -31,6 +32,7 @@ var currentUV= "";
 var weatherDataAll = [weatherData]
 var weatherData = [{temp:"90", wind:"something", humidity:"20", skies:"12"}];
 var search = document.getElementById('searchbar')
+var today= moment(weather.dt.value).format(" MMM D, YYYY");
 
 
 
@@ -118,14 +120,14 @@ function addCityButton(cityName){
   console.log('addCityButton');
   var li = document.createElement("li");
   li.className= 'city';
-  li.append(<li class="city" onclick= "renderWeatherData("+cityName+ ")";
+  li.append(<li class="city" onclick= "renderWeatherData(' + cityName+ ')" >);
   li.appendChild(document.createTextNode(cityName));
   cityButtons.appendChild(li);
 }
 // use api to set textcontent on required feilds
 
 function addText(){
-
+cityAndDate.innerHTML = searchbar.value + ' '+today;
 todayTemp.innerHTML = "Temp:" + weatherDataAll[1]
 todayWind.innerHTML = "Wind:" + weatherDataAll[2]
 todayHum.innerHTML = "Humidity:" + weatherDataAll[3]
