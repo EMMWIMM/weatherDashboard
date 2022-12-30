@@ -1,11 +1,12 @@
 var requestURL =     "https://api.openweathermap.org/data/2.5/forecast?APPID=d242faf8a83997f5dd692d680eed72bb&units=imperial&";
-var requestWeather = "https://api.openweathermap.org/data/2.5/weather?appid=d242faf8a83997f5dd692d680eed72bb";//&q=boston";
 var request25URL =   "https://api.openweathermap.org/data/2.5/uvi?appid=d242faf8a83997f5dd692d680eed72bb";//&lat=40.3641&lon=111.7385";
-var coordsURL =      "https://api.openweathermap.org/geo/2.5/direct?limit=1&appid=d242faf8a83997f5dd692d680eed72bb";
+var coordsURL =      "https://api.openweathermap.org/data/2.5/weather?appid=d242faf8a83997f5dd692d680eed72bb";//&q=boston";
 var todayWind = document.getElementById("todayWind");
 var todayUV = document.getElementById("todayUV");
 var todayHum = document.getElementById("todayHum");
 var todayTemp = document.getElementById("todayTemp");
+var todayIconContainer = document.getElementById("todayIcon");
+const image = document.createElement('img')
 var cityAndDate = document.getElementById('cityAndDate');
 var day1 = document.getElementById("day1");
 var day2 = document.getElementById("day2");
@@ -32,6 +33,11 @@ var uv2 = document.getElementById("uv2");
 var uv3 = document.getElementById("uv3");
 var uv4 = document.getElementById("uv4");
 var uv5 = document.getElementById("uv5");
+var icon1 = document.getElementById("img1");
+var icon2 = document.getElementById("img2");
+var icon3 = document.getElementById("img3");
+var icon4 = document.getElementById("img4");
+var icon5 = document.getElementById("img5");
 var cityButtons = document.getElementById('searchCityButtons')
 var currentHum = "";
 var currentWind ="";
@@ -54,7 +60,7 @@ var today = day+  "/" +month +"/" + year;
 // var weatherData = [{temp:"90", wind:"something", humidity:"20", skies:"12"},{temp:"100", wind:"80mph", humidity:"99", skies:"loudy"},{temp:"100", wind:"80mph", humidity:"99", skies:"loudy"},{temp:"100", wind:"80mph", humidity:"99", skies:"loudy"},{temp:"100", wind:"80mph", humidity:"99", skies:"loudy"}];
 function getAPICity(cityName){
   console.log("getAPICity("+cityName+")");
-  return fetch(requestWeather+"&q="+cityName)
+  return fetch(requestURL+"&q="+cityName)
     .then((response) => {
       return response.json().then((data) => {
         console.log(data);
@@ -73,7 +79,6 @@ function getCoords(cityName){
   return fetch(coordsURL+"&q="+cityName)
     .then((response) => {
       return response.json().then((data) => {
-        console.log(data);
         return data;
       }).catch((err) => {
         console.log(err);
@@ -83,16 +88,42 @@ function getCoords(cityName){
   //   console.log("we got it bois");
   // }
 }
+function getUVIndex(lat, lon){
+  console.log("getUVIndex("+latLong+")");
+  var latLong = [];
+  return fetch(request25URL+"&lat="+lat+"&lon="+lon)
+    .then((response) => {
+      return response.json().then((data) => {
+        console.log(data);
+        
+        return data.value;
+      }).catch((err) => {
+        console.log(err);
+      })
+    });
+}
 async function renderWeatherData(cityName){
 
   event.preventDefault();
   weatherDataAll.length=0;
   var lsWeatherCity = localStorage.getItem(cityName);
   console.log("lsWeatherCity:"+lsWeatherCity);
-  var cityWeatherData;
+  
+  var cityData = [];
+  cityData = await getCoords(cityName);
+  
+  console.log('cityData:'+cityData);
+  //console.log('2:'+cityData[2]);
+  var uvIndex = await getUVIndex(cityData.coord.lat, cityData.coord.lon);
+
+  var iconString = cityData.weather[0].icon;
+
+
+  var cityWeatherData;  
   if(!lsWeatherCity){
       console.log('not stored');
       cityWeatherData = await getAPICity(cityName);
+      addCityButton(cityName);
   } else {
       cityWeatherData = JSON.parse(lsWeatherCity);
   }
@@ -118,12 +149,12 @@ async function renderWeatherData(cityName){
 
     weatherData.city = cityName;
 
-    weatherDataAll.push(weatherData.temp, weatherData.wind, weatherData.humidity, weatherData.skies, weatherData.city,);
+    weatherDataAll.push(weatherData.temp, weatherData.wind, weatherData.humidity, weatherData.skies, weatherData.city, uvIndex, cityWeatherData.list[i].weather[0].icon);
     console.log(JSON.stringify("cwd : "+cityWeatherData));
     localStorage.setItem( weatherData.city, JSON.stringify(cityWeatherData));
   }
   addText();
-  addCityButton(cityName);
+ 
   //weatherData = cityWeatherData;
 
 }
@@ -143,34 +174,45 @@ function addCityButton(cityName){
 // use api to set textcontent on required feilds
 
 function addText(cityName){
-  cityAndDate.innerHTML = cityName + ' '+today;
-  todayTemp.innerHTML = "Temp: " + weatherDataAll[1]
-  todayWind.innerHTML = "Wind: " + weatherDataAll[2]
-  todayHum.innerHTML = "Humidity: " + weatherDataAll[3]
-  todayUV.innerHTML = "UV Index: " + weatherDataAll[4]
+  cityAndDate.innerHTML = weatherDataAll[4] + ' ' + today;
+  todayTemp.innerHTML = "Temp: " + weatherDataAll[0]
+  todayWind.innerHTML = "Wind: " + weatherDataAll[1]
+  todayHum.innerHTML = "Humidity: " + weatherDataAll[2]
+  todayUV.innerHTML = "UV Index: " + weatherDataAll[5]
+  image.src= "http://openweathermap.org/img/w/"+weatherDataAll[6]+".png";
+  todayIconContainer.appendChild(image);
 
-  t1.innerHTML = "Temp: " + weatherDataAll[1]
-  w1.innerHTML = "Wind: " + weatherDataAll[2]
-  h1.innerHTML = "Humidity: " + weatherDataAll[3]
-  uv1.innerHTML = "UV Index: " + weatherDataAll[4]
+  t1.innerHTML = "Temp: " + weatherDataAll[0]
+  w1.innerHTML = "Wind: " + weatherDataAll[1]
+  h1.innerHTML = "Humidity: " + weatherDataAll[2]
+  uv1.innerHTML = "Skies: " + weatherDataAll[3]
+  icon1.src="http://openweathermap.org/img/w/"+weatherDataAll[6]+".png";
+  
+  offset=7;
+  t2.innerHTML = "Temp: " + weatherDataAll[0+offset]
+  w2.innerHTML = "Wind: " + weatherDataAll[1+offset]
+  h2.innerHTML = "Humidity: " + weatherDataAll[2+offset]
+  uv2.innerHTML = "Skies: " + weatherDataAll[3+offset]
+  icon2.src="http://openweathermap.org/img/w/"+weatherDataAll[6+offset]+".png";
 
-  t2.innerHTML = "Temp: " + weatherDataAll[5]
-  w2.innerHTML = "Wind: " + weatherDataAll[6]
-  h2.innerHTML = "Humidity: " + weatherDataAll[7]
-  uv2.innerHTML = "UV Index: " + weatherDataAll[8]
+  offset+=7;
+  t3.innerHTML = "Temp: " + weatherDataAll[0+offset]
+  w3.innerHTML = "Wind: " + weatherDataAll[1+offset]
+  h3.innerHTML = "Humidity: " + weatherDataAll[2+offset]
+  uv3.innerHTML = "Skiesx: " + weatherDataAll[3+offset]
+  icon3.src="http://openweathermap.org/img/w/"+weatherDataAll[6+offset]+".png";
 
-  t3.innerHTML = "Temp: " + weatherDataAll[9]
-  w3.innerHTML = "Wind: " + weatherDataAll[10]
-  h3.innerHTML = "Humidity: " + weatherDataAll[11]
-  uv3.innerHTML = "UV Index: " + weatherDataAll[12]
+  offset+=7;
+  t4.innerHTML = "Temp: " + weatherDataAll[0+offset]
+  w4.innerHTML = "Wind: " + weatherDataAll[1+offset]
+  h4.innerHTML = "Humidity: " + weatherDataAll[2+offset]
+  uv4.innerHTML = "Skies: " + weatherDataAll[3+offset]
+  icon4.src="http://openweathermap.org/img/w/"+weatherDataAll[6+offset]+".png";
 
-  t4.innerHTML = "Temp: " + weatherDataAll[13]
-  w4.innerHTML = "Wind: " + weatherDataAll[14]
-  h4.innerHTML = "Humidity: " + weatherDataAll[15]
-  uv4.innerHTML = "UV Index: " + weatherDataAll[16]
-
-  t5.innerHTML = "Temp: " + weatherDataAll[17]
-  w5.innerHTML = "Wind: " + weatherDataAll[18]
-  h5.innerHTML = "Humidity: " + weatherDataAll[19]
-  uv5.innerHTML = "UV Index: " + weatherDataAll[20]
+  offset+=7;
+  t5.innerHTML = "Temp: " + weatherDataAll[0+offset]
+  w5.innerHTML = "Wind: " + weatherDataAll[1+offset]
+  h5.innerHTML = "Humidity: " + weatherDataAll[2+offset]
+  uv5.innerHTML = "Skies: " + weatherDataAll[3+offset]
+  icon5.src="http://openweathermap.org/img/w/"+weatherDataAll[6+offset]+".png";
 }
