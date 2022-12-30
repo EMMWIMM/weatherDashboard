@@ -1,5 +1,7 @@
-var requestURL = "http://api.openweathermap.org/data/2.5/forecast?APPID=8cc2bc5b692b912633c29866f21e24d9&units=imperial&";
-var coordsURL = "http://api.openweathermap.org/geo/1.0/direct?limit=1&appid=8cc2bc5b692b912633c29866f21e24d9";
+var requestURL =     "https://api.openweathermap.org/data/2.5/forecast?APPID=d242faf8a83997f5dd692d680eed72bb&units=imperial&";
+var requestWeather = "https://api.openweathermap.org/data/2.5/weather?appid=d242faf8a83997f5dd692d680eed72bb";//&q=boston";
+var request25URL =   "https://api.openweathermap.org/data/2.5/uvi?appid=d242faf8a83997f5dd692d680eed72bb";//&lat=40.3641&lon=111.7385";
+var coordsURL =      "https://api.openweathermap.org/geo/2.5/direct?limit=1&appid=d242faf8a83997f5dd692d680eed72bb";
 var todayWind = document.getElementById("todayWind");
 var todayUV = document.getElementById("todayUV");
 var todayHum = document.getElementById("todayHum");
@@ -25,14 +27,24 @@ var h2 = document.getElementById('h2')
 var h3 = document.getElementById('h3')
 var h4 = document.getElementById('h4')
 var h5 = document.getElementById('h5')
+var uv1 = document.getElementById("uv1");
+var uv2 = document.getElementById("uv2");
+var uv3 = document.getElementById("uv3");
+var uv4 = document.getElementById("uv4");
+var uv5 = document.getElementById("uv5");
 var cityButtons = document.getElementById('searchCityButtons')
 var currentHum = "";
 var currentWind ="";
 var currentUV= "";
 var weatherDataAll = [weatherData]
-var weatherData = [{temp:"90", wind:"something", humidity:"20", skies:"12"}];
+var weatherData = [{temp:"90", wind:"something", humidity:"20", uv:"12"}];
 var search = document.getElementById('searchbar')
-var today= moment(weather.dt.value).format(" MMM D, YYYY");
+const d = new Date();
+var day = d.getDate();
+var month = d.getMonth();
+var year = d.getFullYear();
+var today = day+  "/" +month +"/" + year;
+
 
 
 
@@ -42,7 +54,7 @@ var today= moment(weather.dt.value).format(" MMM D, YYYY");
 // var weatherData = [{temp:"90", wind:"something", humidity:"20", skies:"12"},{temp:"100", wind:"80mph", humidity:"99", skies:"loudy"},{temp:"100", wind:"80mph", humidity:"99", skies:"loudy"},{temp:"100", wind:"80mph", humidity:"99", skies:"loudy"},{temp:"100", wind:"80mph", humidity:"99", skies:"loudy"}];
 function getAPICity(cityName){
   console.log("getAPICity("+cityName+")");
-  return fetch(requestURL+"&q="+cityName)
+  return fetch(requestWeather+"&q="+cityName)
     .then((response) => {
       return response.json().then((data) => {
         console.log(data);
@@ -72,7 +84,9 @@ function getCoords(cityName){
   // }
 }
 async function renderWeatherData(cityName){
+
   event.preventDefault();
+  weatherDataAll.length=0;
   var lsWeatherCity = localStorage.getItem(cityName);
   console.log("lsWeatherCity:"+lsWeatherCity);
   var cityWeatherData;
@@ -120,35 +134,43 @@ function addCityButton(cityName){
   console.log('addCityButton');
   var li = document.createElement("li");
   li.className= 'city';
-  li.append(<li class="city" onclick= "renderWeatherData(' + cityName+ ')" >);
-  li.appendChild(document.createTextNode(cityName));
+  li.setAttribute("class", "city");
+  li.setAttribute("onclick", "renderWeatherData('"+cityName+"')");
+  li.append(cityName);
+  //li.appendChild(document.createTextNode(cityName));
   cityButtons.appendChild(li);
 }
 // use api to set textcontent on required feilds
 
-function addText(){
-cityAndDate.innerHTML = searchbar.value + ' '+today;
-todayTemp.innerHTML = "Temp:" + weatherDataAll[1]
-todayWind.innerHTML = "Wind:" + weatherDataAll[2]
-todayHum.innerHTML = "Humidity:" + weatherDataAll[3]
+function addText(cityName){
+  cityAndDate.innerHTML = cityName + ' '+today;
+  todayTemp.innerHTML = "Temp: " + weatherDataAll[1]
+  todayWind.innerHTML = "Wind: " + weatherDataAll[2]
+  todayHum.innerHTML = "Humidity: " + weatherDataAll[3]
+  todayUV.innerHTML = "UV Index: " + weatherDataAll[4]
 
-t1.innerHTML = "Temp:" + weatherDataAll[1]
-w1.innerHTML = "Wind:" + weatherDataAll[2]
-h1.innerHTML = "Humidity:" + weatherDataAll[3]
+  t1.innerHTML = "Temp: " + weatherDataAll[1]
+  w1.innerHTML = "Wind: " + weatherDataAll[2]
+  h1.innerHTML = "Humidity: " + weatherDataAll[3]
+  uv1.innerHTML = "UV Index: " + weatherDataAll[4]
 
-t2.innerHTML = "Temp:" + weatherDataAll[5]
-w2.innerHTML = "Wind:" + weatherDataAll[6]
-h2.innerHTML = "Humidity:" + weatherDataAll[7]
+  t2.innerHTML = "Temp: " + weatherDataAll[5]
+  w2.innerHTML = "Wind: " + weatherDataAll[6]
+  h2.innerHTML = "Humidity: " + weatherDataAll[7]
+  uv2.innerHTML = "UV Index: " + weatherDataAll[8]
 
-t3.innerHTML = "Temp:" + weatherDataAll[9]
-w3.innerHTML = "Wind:" + weatherDataAll[10]
-h3.innerHTML = "Humidity:" + weatherDataAll[11]
+  t3.innerHTML = "Temp: " + weatherDataAll[9]
+  w3.innerHTML = "Wind: " + weatherDataAll[10]
+  h3.innerHTML = "Humidity: " + weatherDataAll[11]
+  uv3.innerHTML = "UV Index: " + weatherDataAll[12]
 
-t4.innerHTML = "Temp:" + weatherDataAll[13]
-w4.innerHTML = "Wind:" + weatherDataAll[14]
-h4.innerHTML = "Humidity:" + weatherDataAll[15]
+  t4.innerHTML = "Temp: " + weatherDataAll[13]
+  w4.innerHTML = "Wind: " + weatherDataAll[14]
+  h4.innerHTML = "Humidity: " + weatherDataAll[15]
+  uv4.innerHTML = "UV Index: " + weatherDataAll[16]
 
-t5.innerHTML = "Temp:" + weatherDataAll[16]
-w5.innerHTML = "Wind:" + weatherDataAll[17]
-h5.innerHTML = "Humidity:" + weatherDataAll[18]
+  t5.innerHTML = "Temp: " + weatherDataAll[17]
+  w5.innerHTML = "Wind: " + weatherDataAll[18]
+  h5.innerHTML = "Humidity: " + weatherDataAll[19]
+  uv5.innerHTML = "UV Index: " + weatherDataAll[20]
 }
